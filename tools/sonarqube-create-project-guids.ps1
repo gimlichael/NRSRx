@@ -16,7 +16,7 @@ foreach ($pathobject in $paths) {
     $node = $doc.SelectSingleNode("//Project/PropertyGroup/ProjectGuid")
     if (!$node) {
         $child = $doc.CreateElement("ProjectGuid")
-        $child.InnerText = [guid]::NewGuid().ToString().ToUpper()
+        $child.InnerText = [guid]::NewGuid().ToString().ToLower()
         $node = $doc.SelectSingleNode("//Project/PropertyGroup")
         if (!$node){        
             Write-Host "Error:" $path "- Project file is missing //Project/PropertyGroup node"
@@ -24,14 +24,14 @@ foreach ($pathobject in $paths) {
         else {
             $node.AppendChild($child)
             $doc.Save($path)
-            $projectGuids += $child.InnerText.ToUpper()
+            $projectGuids += $child.InnerText.ToLower()
         }
     }
     elseif($projectGuids.Contains($node.InnerText)){
         Write-Host "Duplicate found"
-        $node.InnerText = [guid]::NewGuid().ToString().ToUpper()
+        $node.InnerText = [guid]::NewGuid().ToString().ToLower()
         $doc.Save($path)        
-        $projectGuids += $node.InnerText.ToUpper();
+        $projectGuids += $node.InnerText.ToLower();
     }
     else{
         $projectGuids += $node.InnerText;
